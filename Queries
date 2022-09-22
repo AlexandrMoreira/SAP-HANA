@@ -1,0 +1,45 @@
+-- Gramatura Linear / Gramatura Real por Ferramentas --
+  
+  SELECT 
+	T0."ItemCode" as "Itens",
+	T0."U_SPS_PROD_KmNominal" as "PesoNominal",
+	T0."U_SPS_PROD_Kilo_por_Metro" as "PesoAtual",
+	CAST ((T0."U_SPS_PROD_KmNominal" / NULLIF(T0."U_SPS_PROD_Kilo_por_Metro",0)) AS DECIMAL(26,2))  || 'Kg' as "Kg/Nominal",
+	CAST ((T0."U_SPS_PROD_KmNominal" / NULLIF(T0."U_SPS_PROD_Kilo_por_Metro",0)) * 100 AS DECIMAL(26,2))  || '%' as "Kg/Nominal"
+	 	 	 
+FROM
+	OITM T0
+	
+WHERE 
+
+	T0."U_SPS_PROD_KmNominal" IS NOT NULL
+	
+---------------------------------------------------------------------------------------------------------------------------------------------
+-- Ferramentas em condição de Nitretação --
+
+
+SELECT
+	T0."ItemCode" as "CodigoItem",
+	---Vida Util
+	T0."U_SPS_PROD_VidaUtil" as "VidaUtilTotalFerramenta",
+	T0."U_SPS_PROD_UsoProducao" "TotalUsoFerramenta",
+	CAST((T0."U_SPS_PROD_UsoProducao" / T0."U_SPS_PROD_VidaUtil") * 100 AS DECIMAL(26,2)) || '%' as "%UsoVidaUtil",
+	------------
+
+	---Nitretacao
+	T0."U_SPS_PROD_LimiteNitretacao" as "LimiteNitFerramenta",
+	T0."U_SPS_PROD_UsoAtual" as "UsoAtualNitretacao",
+	CAST((T0."U_SPS_PROD_UsoAtual" / T0."U_SPS_PROD_LimiteNitretacao") * 100 AS DECIMAL(26,2)) || '%' as "%UsoNitAtual",
+	------------
+
+	T0."U_SPS_PROD_Nitretacao" || '/' || FLOOR(T0."U_SPS_PROD_VidaUtil" / T0."U_SPS_PROD_LimiteNitretacao") as "NoNitVsPlan",
+	
+	T0."U_SPS_PROD_DataStatus" as "UltimoStatus"
+FROM 
+	OITM T0 
+	
+WHERE 
+	"ItemType" = 'F' 
+	AND "U_SPS_PRVD_Ferramenta" = 'Y'
+	--AND "U_SPS_PROD_UsoAtual" > "U_SPS_PROD_LimiteNitretacao"
+	AND CAST((T0."U_SPS_PROD_UsoAtual" / T0."U_SPS_PROD_LimiteNitretacao") * 100 AS DECIMAL(26,2)) >= 100
