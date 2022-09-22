@@ -43,3 +43,22 @@ WHERE
 	AND "U_SPS_PRVD_Ferramenta" = 'Y'
 	--AND "U_SPS_PROD_UsoAtual" > "U_SPS_PROD_LimiteNitretacao"
 	AND CAST((T0."U_SPS_PROD_UsoAtual" / T0."U_SPS_PROD_LimiteNitretacao") * 100 AS DECIMAL(26,2)) >= 100
+
+---------------------------------------------------------------------------------------------------------------------------------------------
+
+-- Ferramentas por Status --
+
+SELECT 
+	T0."ItemCode" as "Ferramenta",
+	CASE 
+		WHEN T0."U_SPS_PROD_Status" = 1 THEN 'Indisponível'
+		WHEN T0."U_SPS_PROD_Status" = 2 THEN 'Disponível' 
+		WHEN T0."U_SPS_PROD_Status" = 3 THEN 'EmManutenção' 
+		WHEN T0."U_SPS_PROD_Status" = 4 THEN 'AtribuidaàOrdem' 
+		WHEN T0."U_SPS_PROD_Status" = 5 THEN 'Morta' 
+		ELSE 'NãoInformado'
+	END "Status"
+FROM
+	OITM T0
+WHERE
+	T0."U_SPS_PRVD_Ferramenta" = 'Y'
