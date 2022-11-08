@@ -1,0 +1,122 @@
+--- SP_SPS_BEAS_RMIND_NOVO ---
+
+
+CREATE PROCEDURE SP_SPS_BEAS_RMIND_NOVO (
+	pers_id varchar(50),
+	cardcode varchar(50),
+	complemento varchar(200),
+	dataLanc varchar(50),
+	dataPrev varchar(50),
+	numNF varchar(50),
+	obra varchar(200),
+	obs varchar(200),
+	origNF varchar(200),
+	pesagemNF varchar(50),
+	repesagemNF varchar(50),
+	faltaNF varchar(50),
+	acaoNF varchar(50),
+	solidoPeso varchar(50),
+	solidoSaldo varchar(50),
+	solidoUtilizar varchar(50),
+	solidoFalta varchar(50),
+	tubularPeso varchar(50),
+	tubularSaldo varchar(50),
+	tubularUtilizar varchar(50),
+	tubularFalta varchar(50),
+	chapaPeso varchar(50),
+	chapaSaldo varchar(50),
+	chapaUtilizar varchar(50),
+	chapaFalta varchar(50),
+	distribuicao varchar(50),
+	tipoRM varchar(50),
+	umVenda varchar(50),
+	vendedor varchar(50),
+	acabamento varchar(50),
+	classe varchar(50),
+	usinagem varchar(50),
+	preparacao varchar(50)
+)
+AS
+BEGIN
+	
+	DECLARE docentry int;
+	BEGIN
+		/*
+		DECLARE EXIT HANDLER FOR SQLEXCEPTION
+		BEGIN
+			INSERT INTO SPS_LOG_ERROR VALUES (:pers_id,'novoCadastro',-::SQL_ERROR_CODE,SUBSTRING(::SQL_ERROR_MESSAGE,1,200));
+		END;
+		*/
+		
+		SELECT U_SPS_RMIND_CAB_S.NEXTVAL into docentry FROM DUMMY;	
+		
+		--SELECT * FROM "@SPS_RMIND_CAB";	
+		INSERT INTO "@SPS_RMIND_CAB"
+		SELECT 
+			:docentry
+			,:docentry
+			,(SELECT "AbsEntry" FROM OFPR where "Code" = TO_VARCHAR(current_date,'YYYY-MM'))
+			,0
+			,-1
+			,'N'
+			,'N'
+			,'SPS_RMIND'
+			,null
+			,1
+			,'N'
+			,'O'
+			,current_date
+			,TO_INT(TO_VARCHAR(current_timestamp,'HH24mi'))
+			,current_date
+			,TO_INT(TO_VARCHAR(current_timestamp,'HH24mi'))
+			,'I'
+			,'W'
+			,'manager'
+			,null
+			,:cardcode "U_CardCode"
+			,(SELECT "CardName" FROM OCRD WHERE "CardCode"=:cardcode ) "U_CardName"
+			,:dataLanc "U_DocDate"
+			,TO_INT(:numNF) "U_Serial"
+			,:origNF "U_Origem"
+			,TO_INT(:vendedor) "U_SlpCode"
+			,(Select "SlpName" FROM OSLP WHERE "SlpCode" = TO_INT(:vendedor)) "U_SlpName"
+			,:obs "U_Comments"
+			,:tipoRM "U_TipoRomaneio"
+			,:complemento "U_Complemento"
+			,0 "U_PesoTotal"
+			,:solidoPeso "U_SolidoQty"
+			,:tubularPeso "U_TuboQty"
+			,:chapaPeso "U_ChapaQty"
+			,:solidoUtilizar "U_SolidoPc"
+			,:tubularUtilizar "U_TuboPc"
+			,:chapaUtilizar "U_ChapaPc"
+			,:acabamento "U_Acabamento"
+			,:classe "U_Classe"
+			,:usinagem "U_Usinagem"
+			,0 "U_Total"
+			,:obra "U_Obra"
+			,:dataPrev "U_Previsao"
+			,:solidoFalta "U_SolidoFS"
+			,:tubularFalta "U_TuboFS"
+			,:chapaFalta "U_ChapaFS" 
+			,0 "U_TotalFS"
+			,'0' "U_Status"
+			,:preparacao "U_Preparacao"
+			,:solidoSaldo "U_SolidoSaldo"
+			,:tubularSaldo "U_TuboSaldo"
+			,:chapaSaldo"U_ChapaSaldo"
+			,:distribuicao "U_Distribuicao"
+			,pesagemNF "U_pesagemNF"
+			,repesagemNF "U_repesagemNF"
+			,faltaNF "U_FaltaNF"
+			,acaoNF "U_AcaoNF"
+			,:umVenda "U_UMRomaneio"
+			,0
+			,0
+			,0
+			,0
+		FROM DUMMY;
+		
+		INSERT INTO SPS_LOG_ERROR VALUES (:pers_id,'novoCadastro',:docentry,'Cadastrado com Sucesso!');
+	END;
+END;
