@@ -1,0 +1,85 @@
+--- SP_SPS_BEAS_RMIND_ATUALIZAR---
+
+CREATE PROCEDURE SP_SPS_BEAS_RMIND_ATUALIZAR (
+	pers_id varchar(50),
+	docentry varchar(50),
+	cardcode varchar(50),
+	complemento varchar(200),
+	dataLanc varchar(50),
+	dataPrev varchar(50),
+	numNF varchar(50),
+	obra varchar(200),
+	obs varchar(200),
+	origNF varchar(200),
+	pesagemNF varchar(50),
+	repesagemNF varchar(50),
+	faltaNF varchar(50),
+	acaoNF varchar(50),
+	solidoPeso varchar(50),
+	solidoSaldo varchar(50),
+	solidoUtilizar varchar(50),
+	solidoFalta varchar(50),
+	tubularPeso varchar(50),
+	tubularSaldo varchar(50),
+	tubularUtilizar varchar(50),
+	tubularFalta varchar(50),
+	chapaPeso varchar(50),
+	chapaSaldo varchar(50),
+	chapaUtilizar varchar(50),
+	chapaFalta varchar(50),
+	distribuicao varchar(50),
+	tipoRM varchar(50),
+	umVenda varchar(50),
+	vendedor varchar(50),
+	acabamento varchar(50),
+	classe varchar(50),
+	usinagem varchar(50),
+	preparacao varchar(50)
+)
+AS
+BEGIN
+
+	--SELECT * FROM "@SPS_RMIND_CAB";	
+	UPDATE "@SPS_RMIND_CAB" SET
+		"U_CardCode"=:cardcode 
+		,"U_CardName"=(SELECT "CardName" FROM OCRD WHERE "CardCode"=:cardcode ) 
+		,"U_DocDate"=:dataLanc 
+		,"U_Serial"=TO_INT(:numNF) 
+		,"U_Origem"=:origNF 
+		,"U_SlpCode"=TO_INT(:vendedor) 
+		,"U_SlpName"=(Select "SlpName" FROM OSLP WHERE "SlpCode" = TO_INT(:vendedor)) 
+		,"U_Comments"= :obs 
+		,"U_TipoRomaneio"= :tipoRM 
+		,"U_UMRomaneio"=:umVenda 
+		,"U_Complemento"=:complemento 
+		,"U_PesoTotal"=0 
+		,"U_SolidoQty"=:solidoPeso 
+		,"U_TuboQty"=:tubularPeso 
+		,"U_ChapaQty"=:chapaPeso 
+		,"U_SolidoPc"=:solidoUtilizar 
+		,"U_TuboPc"=:tubularUtilizar 
+		,"U_ChapaPc"=:chapaUtilizar 
+		,"U_Acabamento"=:acabamento 
+		,"U_Classe"=:classe 
+		,"U_Usinagem"=:usinagem 
+		,"U_Total"=0 
+		,"U_Obra"=:obra 
+		,"U_Previsao"=:dataPrev 
+		,"U_SolidoFS"=:solidoFalta 
+		,"U_TuboFS"=:tubularFalta 
+		,"U_ChapaFS"=:chapaFalta 
+		,"U_TotalFS"=0 
+		--,"U_Status"='0' 
+		,"U_Preparacao"=:preparacao 
+		,"U_SolidoSaldo"=:solidoSaldo 
+		,"U_TuboSaldo"=:tubularSaldo 
+		,"U_ChapaSaldo"=:chapaSaldo 
+		,"U_Distribuicao"=:distribuicao
+		,"U_PesagemNF"=:pesagemNF 
+		,"U_RepesagemNF"=:repesagemNF 
+		,"U_FaltaNF"=:faltaNF 
+		,"U_AcaoNF"=:acaoNF 
+	WHERE "DocEntry"=:docentry;
+	
+	INSERT INTO SPS_LOG_ERROR VALUES (:pers_id,'atualCadastro',:docentry,'Atualizado com Sucesso!');
+END;
