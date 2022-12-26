@@ -1,0 +1,43 @@
+USOS DA REGEX PARA TRAZER APENAS O TAMANHO DO CORTE DA CHAPA - OLGA
+EXEMPLO
+ITEM CODE: EK202.6060.T5.6000.19020
+TAMANHO DO CORTE É 6000
+USAR REGEX PRA TRAZER APENAS O TAMANHO NA QUERRY
+TODAS AS QUERIES ABAIXO RETORNAM O DESEJADO, CADA UM DE UMA FORMA MAIS SIMPLES.
+
+
+-----------------------------------------------------------------------------------------------------------------------------------------
+
+SELECT
+	"ItemCode",
+    SUBSTR_REGEXPR('.+?..+?..+?..+?..+?.+?.+?.+?.+?.+?(.+?)$' in "ItemCode" GROUP 1)".",
+    	SUBSTR_BEFORE ("ItemCode",'.')".",
+    		SUBSTR_BEFORE (SUBSTR_AFTER ("ItemCode",'.'),'.')".",
+    			SUBSTR_BEFORE (SUBSTR_AFTER (SUBSTR_AFTER ("ItemCode",'.'),'.'),'.')".",
+    				SUBSTR_BEFORE (SUBSTR_AFTER(SUBSTR_AFTER (SUBSTR_AFTER("ItemCode",'.'),'.'),'.'),'.') "Tamanho_Corte"
+FROM OITM
+
+-----------------------------------------------------------------------------------------------------------------------------------------
+
+SELECT
+ SUBSTR_REGEXPR( '([.])([^.]*)(?=.)' IN CONCAT(CONCAT('.',"ItemCode"),'.') OCCURRENCE 1 GROUP 2) "Ferramenta",
+ SUBSTR_REGEXPR( '([.])([^.]*)(?=.)' IN CONCAT(CONCAT('.',"ItemCode"),'.') OCCURRENCE 2 GROUP 2) "Liga",
+ SUBSTR_REGEXPR( '([.])([^.]*)(?=.)' IN CONCAT(CONCAT('.',"ItemCode"),'.') OCCURRENCE 3 GROUP 2) "Tempera",
+SUBSTR_REGEXPR( '([.])([^.]*)(?=.)' IN CONCAT(CONCAT('.',"ItemCode"),'.') OCCURRENCE 4 GROUP 2) "Tamanho"
+FROM OITM;
+
+-----------------------------------------------------------------------------------------------------------------------------------------
+
+SELECT
+	"ItemCode"
+	,SUBSTR_REGEXPR( '^(.+?)\..+?\..+?\..+?\..+?$' IN "ItemCode" GROUP 1)
+	,SUBSTR_REGEXPR( '^.+?\..+?\..+?\.(.+?)\..+?$' IN "ItemCode" GROUP 1) 
+	,SUBSTR_REGEXPR( '^.+?\..+?\..+?\..+?\.(.+?)$' IN "ItemCode" GROUP 1)
+	,SUBSTR_REGEXPR( '^.+?\.(.+?\..+?)\..+?\.(.+?)$' IN "ItemCode" GROUP 1)
+FROM OITM;
+
+-----------------------------------------------------------------------------------------------------------------------------------------
+
+SELECT 
+	SUBSTR_REGEXPR( '(.+?)\.' IN "ItemCode" OCCURRENCE 4 GROUP 1)
+FROM OITM
