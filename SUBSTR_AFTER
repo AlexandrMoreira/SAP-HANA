@@ -1,0 +1,10 @@
+Usando a função SUBSTR_AFTER para obter apenas a classe dos materiais
+
+
+```
+SELECT
+	"ItemCode",
+	SUBSTR_AFTER("ItemCode", '.')
+FROM OITM
+WHERE "U_SPS_PRVD_TipoAcabamento" = 'Anodização'	
+```
