@@ -1,0 +1,48 @@
+SELECT 
+	
+	"ItemCode" "Ferramenta",
+	"U_SPS_PROD_GrupoFerramenta" "Grupo de Ferramenta",
+	
+	
+	
+/*	
+CASE
+	WHEN ("U_SPS_PROD_UsoProducao"*1.25) > ("U_SPS_PROD_VidaUtil") THEN 'Próximo do fim'
+		ELSE 'Distante do fim'
+		END "Status Ferramenta",
+*/	
+/*
+CASE 
+	WHEN ("U_SPS_PROD_UsoProducao") > ("U_SPS_PROD_VidaUtil") THEN 'Morta'	
+		ELSE 'Próximo do fim'
+		END "Status Ferramenta"
+*/		
+
+
+CASE
+    
+    WHEN "U_SPS_PROD_Kilo_por_Metro" > ("U_SPS_PROD_KmNominal") THEN 'Próxima do fim'
+    ELSE 'Ferramenta Ativa'
+    END "Status Ferramenta - 8%"
+		
+		
+FROM OITM
+
+WHERE "U_SPS_PRVD_Ferramenta" = 'Y'
+AND "ItemType" = 'F'
+
+
+
+
+GROUP BY "ItemCode", "U_SPS_PROD_UsoProducao", "U_SPS_PROD_VidaUtil", "U_SPS_PROD_GrupoFerramenta",
+		"U_SPS_PROD_Nitretacao", "U_SPS_PROD_LimiteNitretacao", "U_SPS_PROD_LocalAtual", "DocEntry",
+		"U_SPS_PROD_Kilo_por_Metro", "U_SPS_PROD_KmNominal"
+
+		
+HAVING SUM ("U_SPS_PROD_Kilo_por_Metro") > ("U_SPS_PROD_KmNominal"*1.08)
+
+ORDER BY "U_SPS_PROD_KmNominal"
+
+
+
+
