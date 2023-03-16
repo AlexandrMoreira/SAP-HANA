@@ -1,0 +1,35 @@
+SELECT 
+	* ,
+CASE
+
+	WHEN "Resultado" > 1.1 THEN 'Acima do Limite'
+	ELSE 'Dentro do Limite'
+	END "Status Gramatura"
+	
+		
+FROM (
+
+
+SELECT 
+	TOP 20
+	"ItemCode" "Ferramenta",
+	"ItemName" "Descrição",
+	"U_SPS_PROD_Kilo_por_Metro" "Gramatura Atual",	
+	"U_SPS_PROD_KmNominal" "Gramatura Nominal",
+		
+	CAST(("U_SPS_PROD_Kilo_por_Metro" / "U_SPS_PROD_KmNominal") AS DECIMAL (28,4)) "Resultado"
+	
+
+	
+FROM OITM 
+	
+	
+WHERE "U_SPS_PRVD_Ferramenta" = 'Y'
+AND "ItemType" = 'F'
+
+
+GROUP BY "U_SPS_PROD_KmNominal", "U_SPS_PROD_Kilo_por_Metro", "ItemCode", "U_SPS_PROD_GrupoFerramenta", "ItemName"
+ORDER BY CAST(("U_SPS_PROD_Kilo_por_Metro" / "U_SPS_PROD_KmNominal") AS DECIMAL (28,4)) DESC)
+
+
+
