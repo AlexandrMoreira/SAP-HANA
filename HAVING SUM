@@ -1,0 +1,41 @@
+SELECT 
+
+	"ItemCode" "Ferramenta",
+	"ItemName" "Descricao",
+	"U_SPS_PROD_GrupoFerramenta" "Grupo de Ferramenta",
+	"U_SPS_PROD_Nitretacao" "Nitretação",
+	"U_SPS_PROD_LimiteNitretacao" "Limite de Nitretação",
+	"U_SPS_PROD_LocalAtual" "Local Atual", 
+	"U_SPS_PROD_UsoProducao" "Uso Produção",
+	"U_SPS_PROD_VidaUtil" "Vida Útil",
+	
+	
+/*	
+CASE
+	WHEN ("U_SPS_PROD_UsoProducao"*1.25) > ("U_SPS_PROD_VidaUtil") THEN 'Próximo do fim'
+		ELSE 'Distante do fim'
+		END "Status Ferramenta",
+*/	
+CASE 
+	WHEN ("U_SPS_PROD_UsoProducao") > ("U_SPS_PROD_VidaUtil") THEN 'Morta'	
+		ELSE 'Próximo do fim'
+		END "Status Ferramenta"
+		
+		
+		
+FROM OITM
+
+WHERE "U_SPS_PRVD_Ferramenta" = 'Y'
+AND "ItemType" = 'F'
+
+
+
+GROUP BY "ItemCode", "U_SPS_PROD_UsoProducao", "U_SPS_PROD_VidaUtil", "U_SPS_PROD_GrupoFerramenta",
+		"U_SPS_PROD_Nitretacao", "U_SPS_PROD_LimiteNitretacao", "U_SPS_PROD_LocalAtual", "ItemName"
+    
+		
+HAVING SUM("U_SPS_PROD_UsoProducao"*1.25) > ("U_SPS_PROD_VidaUtil") 
+ORDER BY "U_SPS_PROD_UsoProducao";
+
+
+
