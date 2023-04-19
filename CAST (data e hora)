@@ -1,0 +1,9 @@
+TO_VARCHAR("U_Data", 'dd/MM/yyyy')||' / '||TO_VARCHAR(TO_TIME(TO_VARCHAR(LPAD("U_Hora",4,'0')), 'HH24mi'),'HH24:mi') "Data e Hora"
+    
+------------------------------------------------------------------------------------------------------------------------------------------------------------------    
+    
+SELECT 
+
+TO_VARCHAR("CreateDate", 'dd/MM/YYYY') || ' / ' || TO_VARCHAR(TO_TIME(TO_VARCHAR(LPAD("CreateDate",4,'0')), 'HH24mi'), 'HH24:mi') "Data e Hora"
+
+FROM ORDR T0
