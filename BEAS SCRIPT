@@ -1,0 +1,36 @@
+-- PLANEJAMENTO DE ATIVIDADES -- 
+- cancela op's abertas com pedidos de venda fechados -
+
+----------------------------------------------------------------
+
+
+
+destroy=dtw
+declare=dtw=ue_datastorevalues
+dtw=select&
+	T0."ItemCode" "Código_Item",&
+	T1."BELNR_ID" "OP",&
+	T1."BELPOS_ID" "POS",&
+CASE&
+	WHEN T0."LineStatus" = 'O' THEN 'ABERTO'&
+	ELSE 'FECHADO'&
+	END "Status_Pedido_Venda",&
+CASE&
+	WHEN T1."ABGKZ" = 'N' THEN 'ABERTO'&
+	ELSE 'FECHADO'&
+	END "StatusOP"&
+	FROM RDR1 T0&
+INNER JOIN BEAS_FTPOS T1 ON T1."DocEntry" = T0."DocEntry"&
+		AND T1."AUFTRAGPOS" = T0."LineNum"&
+	WHERE T0."LineStatus" = 'C'&
+AND T1."ABGKZ" = 'N'&
+ORDER BY T1."BELNR_ID", "BELPOS_ID"
+
+for op = 1 to <dtw.rowcount>
+
+declare=mywo=ue_api_wo
+mywo=closeposition=<dtw.op>=<dtw.pos>
+
+dtw=deleterow
+
+next
