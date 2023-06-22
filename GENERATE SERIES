@@ -1,0 +1,15 @@
+SELECT 
+STRING_AGG(''''||GENERATED_PERIOD_END||'''',',')
+FROM SERIES_GENERATE_INTEGER(1,0,500)
+
+----------------------------------------------------------------------------------------------------------
+
+SELECT
+*
+FROM SERIES_GENERATE_DATE('INTERVAL 1 MONTH',current_date,add_days(current_date,365))
+
+----------------------------------------------------------------------------------------------------------
+
+SELECT
+*
+FROM SERIES_GENERATE_DATE('INTERVAL 1 DAY',current_date,add_days(current_date,365))
