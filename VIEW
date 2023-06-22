@@ -1,0 +1,36 @@
+ALTER VIEW "SBO_GRUPOKOVALENT_HOMOLOG2"."NICELABEL" (
+	"Cód. Item",
+	"Descrição",
+	"OP",
+	"U_SPS_NomeRegistro",
+	"U_SPS_NomeEspanhol",
+	"U_SPS_Apresentacao",
+	"U_SPS_Concentracao",
+	"U_SPS_Etiqueta",
+	"U_SPS_ConcentracaoPadrao",
+	"U_SPS_NumeroTestes",
+	"U_SPS_TemperaturaMin",
+	"U_SPS_TemperaturaMax",
+	"U_SPS_LinkSite" ) AS SELECT
+	
+	T0."ItemCode",
+	T0."ItemName",
+	T1."BELNR_ID",
+	T0."U_SPS_NomeRegistro",
+	T0."U_SPS_NomeEspanhol",
+	T0."U_SPS_Apresentacao",
+	T0."U_SPS_Concentracao",
+	T0."U_SPS_Etiqueta",
+	T0."U_SPS_ConcentracaoPadrao",
+	T0."U_SPS_NumeroTestes",
+	T0."U_SPS_TemperaturaMin",
+	T0."U_SPS_TemperaturaMax",
+	T0."U_SPS_LinkSite"
+	
+		
+	
+FROM "OITM" T0
+INNER JOIN "BEAS_FTPOS" T1 ON T1."ItemCode" = T0."ItemCode"
+	
+	
+--SELECT * FROM NICELABEL
