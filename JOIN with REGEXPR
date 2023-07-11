@@ -1,0 +1,13 @@
+INNER JOIN BEAS_APLATZ_STILLSTAND T6 ON SUBSTR_REGEXPR( '(.+?)\-' IN T6."APLATZ_ID" OCCURRENCE 1 GROUP 1) 
+= SUBSTR_REGEXPR( '(.+?)\.' IN T1."ItemCode" OCCURRENCE 1 GROUP 1)
+
+
+BEAS_APLATZ_STILLSTAND = linhas da tabela "Gestão de Ferramentas" do BEAS
+
+JOIN pra juntar ES005-5 com ES005.6063.EXT.6000
+
+No primero REGEX eu retorno tudo antes do '-' 
+
+No segundo REGEX eu retorno tudo antes do primeiro '.'
+
+E faço o JOIN
