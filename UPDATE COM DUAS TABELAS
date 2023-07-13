@@ -1,0 +1,17 @@
+UPDATE BEAS_FTPOS T1
+SET T1."WhsCode" = T0."DfltWH"
+FROM OITM T0
+INNER JOIN BEAS_FTPOS T1 ON T0."ItemCode" = T1."ItemCode"
+--INNER JOIN BEAS_FTHAUPT T2 ON T1."BELNR_ID" = T2."BELNR_ID"
+WHERE "ItmsGrpCod" = 104
+AND "DfltWH" = 'B.ACAB'
+
+
+As OP's de itens acabados e com acabamento deveriam estar apontado para depósito "B.ACAB" mas estavam apontando para o depósito "01"
+Foi feito UPDATE na OITM
+Depois precisei rodar UPDATE na BEAS_FTPOS
+Porém eu preciava mencionar mais de uma tabela no meu UPDATE
+Nesse caso, eu precisava alterar os depósitos da BEAS_FTPOS.WhsCode
+Pecisava que meu BEAS_FTPOS.WhsCode fosse igual a OITM.DfltWH
+Por isso esse UPDATE com JOIN foi feito
+
