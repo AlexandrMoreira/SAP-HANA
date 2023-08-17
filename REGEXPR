@@ -41,3 +41,23 @@ FROM OITM;
 SELECT 
 	SUBSTR_REGEXPR( '(.+?)\.' IN "ItemCode" OCCURRENCE 4 GROUP 1)
 FROM OITM
+
+
+-----------------------------------------------------------------------------------------------------------------------------------------
+DO BEGIN
+DECLARE pString nvarchar (5000); 
+pString := '08H02.6060.T5.6000.NT';
+SELECT
+SUBSTR_REGEXPR( '([.])([^.]*)(?=.)' IN CONCAT(CONCAT('.',pString),'.') OCCURRENCE 5 GROUP 2) firstString
+FROM DUMMY;
+END;
+
+RESULTADO: 'NT'
+
+-----------------------------------------------------------------------------------------------------------------------------------------
+
+SELECT SUBSTRING_REGEXPR ('^(?:[^.]+\.){4}([^\.]+)' IN "ItemCode" GROUP 1 ), "ItemCode"  FROM OITM WHERE "ItemCode" LIKE '%.NT'
+
+RESULTADO: 'NT' e 'ItemCode'
+
+
