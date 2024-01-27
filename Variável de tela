@@ -1,0 +1,8 @@
+SELECT "OcrCode", "OcrName" FROM OOCR 
+
+WHERE "DimCode" = 1 AND "Active" = 'Y' AND LEFT("OcrCode",LENGTH($[$38.10002037])) = $[$38.10002037]
+
+
+Estou usando a várivel de tela do campo "Regra de Distribuição" da Nota Fiscal de Saída: Form=113 Item=38 Pane=1 Column=10002037 Row=1 Variable=432
+Depois pegamos essa consulta, a colocamos em uma consulta formatada, e a adicionamos no campo através do Alt + Shift + F2
+Isso não roda no HANA por conta da sintaxe
